@@ -1,0 +1,101 @@
+\documentclass[10pt, compress]{beamer}
+
+\usetheme[usetitleprogressbar]{polytechniqueorg}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+\usepackage{minted}
+\usepackage{tcolorbox}
+\usepackage[french]{babel}
+\usepackage{tikz}
+\usepackage{framed}
+\usepackage{listings}
+
+\setbeamercolor{footnote}{fg=xorgDarkBg!80}
+
+\usepgfplotslibrary{dateplot}
+\usetikzlibrary{patterns}
+
+\usemintedstyle{monokai}
+\setminted{autogobble,fontsize=\tiny}
+\BeforeBeginEnvironment{minted}{\begin{tcolorbox}[width=1.04\textwidth,
+	grow to left by=0.03\textwidth,
+	colback=xorgDarkBg,coltext=xorgLightBg,boxrule=0cm,arc=0cm,
+	boxsep=0.3em,left=0cm,right=0cm,top=0cm,bottom=0cm]}
+\AfterEndEnvironment{minted}{\end{tcolorbox}}
+
+\tikzset{
+	invisible/.style={opacity=0},
+	visible on/.style={alt={#1{}{invisible}}},
+	alt/.code args={<#1>#2#3}{%
+		\alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+	},
+}
+% defining the new dimensions and parameters
+\newlength{\hatchspread}
+\newlength{\hatchthickness}
+\newlength{\hatchshift}
+\newcommand{\hatchcolor}{}
+% declaring the keys in tikz
+\tikzset{
+	hatchspread/.code={\setlength{\hatchspread}{#1}},
+	hatchthickness/.code={\setlength{\hatchthickness}{#1}},
+	hatchshift/.code={\setlength{\hatchshift}{#1}},% must be >= 0
+	hatchcolor/.code={\renewcommand{\hatchcolor}{#1}}
+}
+% setting the default values
+\tikzset{
+	hatchspread=3pt,
+	hatchthickness=0.4pt,
+	hatchshift=0pt,% must be >= 0
+	hatchcolor=black
+}
+% declaring the pattern
+\pgfdeclarepatternformonly[\hatchspread,\hatchthickness,\hatchshift,\hatchcolor]% variables
+{custom north west lines}% name
+{\pgfqpoint{\dimexpr-2\hatchthickness}{\dimexpr-2\hatchthickness}}% lower left corner
+{\pgfqpoint{\dimexpr\hatchspread+2\hatchthickness}{\dimexpr\hatchspread+2\hatchthickness}}% upper right corner
+{\pgfqpoint{\dimexpr\hatchspread}{\dimexpr\hatchspread}}% tile size
+{% shape description
+	\pgfsetlinewidth{\hatchthickness}
+	\pgfpathmoveto{\pgfqpoint{0pt}{\dimexpr\hatchspread+\hatchshift}}
+	\pgfpathlineto{\pgfqpoint{\dimexpr\hatchspread+0.15pt+\hatchshift}{-0.15pt}}
+	\ifdim \hatchshift > 0pt
+	\pgfpathmoveto{\pgfqpoint{0pt}{\hatchshift}}
+	\pgfpathlineto{\pgfqpoint{\dimexpr0.15pt+\hatchshift}{-0.15pt}}
+	\fi
+	\pgfsetstrokecolor{\hatchcolor}
+	\pgfusepath{stroke}
+}
+
+% Needed since pandoc 1.14
+% Reduces space between elements of a list (written in markdown)
+% For more space between the elements, add an empty line
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\newcommand{\todo}[1]{\fcolorbox{red}{yellow}{TODO: #1}}
+\newcommand{\ignoretext}[1]{}
+
+\title[SELinux vs Analyse de code]{SELinux (outils et bibliothèques) vs analyse de code}
+%\subtitle{Quand "make test" casse }
+\date{Rump SSTIC 2017}
+\author{Nicolas Iooss}
+\institute{}
+
+\begin{document}
+
+\maketitle
+
+%\begin{frame}{Plan}
+%	\tableofcontents
+%\end{frame}
+
+\input{pres.tex}
+
+\plain{Merci de votre attention \\
+\texttt{ } \\
+\url{https://github.com/SELinuxProject/SELinux/commits?author=fishilico} \\
+%\url{https://github.com/fishilico/}
+}
+
+\end{document}
